@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FEAR-ACU News Wire | Breaking Coverage</title>
+    <title>The Wire | FEAR-ACU News — Conspiracy & Community Reporting</title>
     <link rel="stylesheet" href="style.css">
     <style>
         .news-hero {
@@ -48,20 +48,77 @@
             background: #111;
             border-bottom: 1px solid #ff0000;
         }
-        .feed-label { color: #ff0000; letter-spacing: 4px; font-size: 0.75rem; text-transform: uppercase; }
+        .feed-label {
+            color: #ff0000;
+            letter-spacing: 4px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
         .live-dot {
             display: inline-block;
-            width: 8px; height: 8px;
+            width: 8px;
+            height: 8px;
             background: #ff0000;
             border-radius: 50%;
             margin-right: 8px;
             animation: pulse-dot 1s infinite;
+        }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; box-shadow: 0 0 6px #ff0000; }
+            50% { opacity: 0.3; box-shadow: 0 0 2px #ff0000; }
         }
         .current-time {
             color: #555;
             font-size: 0.7rem;
             letter-spacing: 2px;
             font-family: monospace;
+        }
+        .site-map {
+            background: #080808;
+            border: 1px solid #222;
+            border-left: 3px solid #ff0000;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        .site-map h3 {
+            color: #ff4444;
+            letter-spacing: 3px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        .site-map ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 0.5rem;
+        }
+        .site-map li {
+            border-bottom: 1px dotted #1a1a1a;
+        }
+        .site-map li:last-child { border-bottom: none; }
+        .site-map a {
+            color: #ccc;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.2s;
+            display: block;
+            padding: 0.3rem 0;
+        }
+        .site-map a:hover {
+            color: #ff4444;
+            text-decoration: underline;
+        }
+        .site-map .unit-tag {
+            display: inline-block;
+            font-size: 0.6rem;
+            padding: 1px 6px;
+            margin-right: 8px;
+            background: #1a1a00;
+            color: #ffcc00;
+            border: 1px solid #ffcc00;
+            letter-spacing: 1px;
         }
         .article {
             border-bottom: 1px solid #1a1a1a;
@@ -73,6 +130,7 @@
             gap: 1rem;
             margin-bottom: 0.8rem;
             align-items: center;
+            flex-wrap: wrap;
         }
         .article-tag {
             padding: 3px 10px;
@@ -85,7 +143,14 @@
         .tag-investigation { background: #1a1a00; color: #ffcc00; border: 1px solid #ffcc00; }
         .tag-analysis { background: #001a00; color: #00ff44; border: 1px solid #00ff44; }
         .tag-alert { background: #1a0000; color: #ff6666; border: 1px solid #ff6666; }
-        .article-date { color: #555; font-size: 0.65rem; letter-spacing: 2px; }
+        .tag-acu { background: #000; color: #fff; border: 1px solid #fff; }
+        .tag-rru { background: #1a1a00; color: #ffcc00; border: 1px solid #ffcc00; }
+        .tag-aau { background: #1a0000; color: #ff6666; border: 1px solid #ff6666; }
+        .article-date {
+            color: #555;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+        }
         .article h2 {
             color: #ddd;
             font-size: 1.3rem;
@@ -100,6 +165,7 @@
             color: #888;
             line-height: 1.8;
             font-size: 0.9rem;
+            margin-bottom: 0.8rem;
         }
         .article-byline {
             color: #555;
@@ -117,7 +183,6 @@
             filter: saturate(0.8);
             opacity: 0.9;
         }
-
         .conspiracy-box {
             background: #0a0000;
             border: 1px dashed #ff4444;
@@ -144,7 +209,27 @@
         }
         .conspiracy-questions li::before { content: '? '; color: #ff4444; font-weight: bold; font-style: normal; }
         .conspiracy-questions li:last-child { border-bottom: none; }
-
+        .disclaimer {
+            background: #0a0000;
+            border: 1px dashed #333;
+            padding: 0.4rem 1rem;
+            margin: 0 auto 0.8rem;
+            max-width: 900px;
+        }
+        .disclaimer-label {
+            color: #888;
+            font-size: 0.55rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 0.2rem;
+            font-weight: bold;
+        }
+        .disclaimer p {
+            color: #666;
+            font-size: 0.65rem;
+            line-height: 1.5;
+            margin: 0;
+        }
         .dots-pattern {
             background-image: radial-gradient(circle, #1a1a1a 1px, transparent 1px);
             background-size: 20px 20px;
@@ -162,22 +247,20 @@
     <div class="classified-bar">◼ NEWS WIRE INCOMING — FEAR-ACU/CURIOUS DEVELOPMENTS ◼</div>
 
     <div class="breaking-ticker" id="ticker">
-        BREAKING: Unidentified ACU unit observed near I-35 corridor &nbsp;&nbsp;|&nbsp;&nbsp;
+        BREAKING: ACU unit observed near I-35 corridor &nbsp;&nbsp;|&nbsp;&nbsp;
         FEAR-Delta-01 activity increase confirmed by local sources &nbsp;&nbsp;|&nbsp;&nbsp;
-        "Commander Wolf" documents circulate on encrypted channels &nbsp;&nbsp;|&nbsp;&nbsp;
-        Joint training exercise between FEAR-ACU and Austin Metro PD under investigation
+        "Commander Thorne" documents circulate on encrypted channels &nbsp;&nbsp;|&nbsp;&nbsp;
+        Joint training exercise between FEAR-RRU and Austin Metro PD under investigation
     </div>
 
     <div class="news-hero">
         <h1>The Wire</h1>
-        <div class="tagline">Investigating the Interest of FEAR-ACU Since 2019</div>
+        <div class="tagline">Investigating FEAR and Other Unusual Incidents — No Restrictions, No Comment</div>
     </div>
 
     <nav>
         <ul>
-            <li><a href="https://fear-acu.netlify.app/">Unit Site</a></li>
-            <li><a href="./" class="active">News Wire</a></li>
-            <li><a href="https://fear-acu.netlify.app/questions.html">Questions</a></li>
+            <li><a href="index.html" class="active">News Wire</a></li>
         </ul>
     </nav>
 
@@ -189,142 +272,235 @@
             <div class="current-time" id="clock">[ --:--:-- UTC ]</div>
         </div>
 
+        <!-- SITE MAP -->
+        <div class="site-map">
+            <h3>◼ Bureau Index — Active Coverage Areas ◼</h3>
+            <ul>
+                <li><a href="#acu"><span class="unit-tag">ACU</span> FEAR-ACU — Area Containment Unit reports and sightings</a></li>
+                <li><a href="#rru"><span class="unit-tag">RRU</span> FEAR-RRU — Rapid Response Unit coverage</a></li>
+                <li><a href="#aau"><span class="unit-tag">AAU</span> FEAR-AAU — Agency Assistance Unit community operations</a></li>
+                <li><a href="#conspiracy"><span class="unit-tag">? ? ?</span> Conspiracy Desk — broader unusual activity</a></li>
+                <li><a href="#reader-submissions"><span class="unit-tag">READER</span> Reader Submissions — tips, sightings, documents</a></li>
+            </ul>
+        </div>
+
+        <!-- FEAR-ACU STORIES -->
+        <a name="acu"></a>
         <div class="article">
-            <img src="images/news-scene.png" alt="Breaking news scene">
+            <img src="images/news-scene.png" alt="Night scene">
             <div class="article-meta">
-                <span class="article-tag tag-breaking">BREAKING</span>
-                <span class="article-date">FEAR-ACU WIRE — DELIVERED 14:32 UTC, JULY 2026</span>
+                <span class="article-tag tag-acu">FEAR-ACU</span>
+                <span class="article-date">THE WIRE — DELIVERED 23:47 UTC, JULY 2026</span>
             </div>
-            <h2>Unidentified ACU Vehicle Spotted Outside Residential Sector</h2>
+            <h2>ACU Delta-01 Activates Unknown Response Protocol Near Bracken Cave</h2>
             <p>
-                Residents of a suburban area approximately 12 miles east of Austin city center report an unusual
-                tactical vehicle presence on the evening of July 27, 2026. Described as "all-black, no markings,
-                red emergency lights only" — the vehicle was observed for approximately 90 minutes parked at an
-                intersection near a commercial storage facility.
+                Residents of rural northeast Bexar County reported unusual vehicle activity late Tuesday evening. According to three independent witness accounts, a black GMC Yukon with green emergency lights — but no visible markings — was observed establishing a perimeter around a private road leading to the Bracken Cave area.
             </p>
             <p>
-                Multiple witnesses independently report the same vehicle description, but no police or news
-                reports match the sighting. City of Austin public records request filed by community members
-                is pending response under state open-records laws. We will update when information becomes available.
+                The vehicle remained on-scene for approximately 90 minutes. When a local resident approached to ask what was happening, the occupant — described as wearing dark tactical gear — stated that "this is a DPS operation" and directed the individual back to their residence. No press release, no public statement, no Bexar County sheriff's department record of the incident exists.
             </p>
-            <div class="article-byline">[ Community Submitted / Cross-Verification Pending ]</div>
+            <p>
+                FEAR-ACU's Area Containment Unit is designated for anomalous incidents that exceed local law enforcement capacity. Bracken Cave is home to the world's largest bat colony — a fact that has prompted speculation among the Wire's readership about what kind of anomaly would require federal containment a half-mile from a protected wildlife site.
+            </p>
+            <p>
+                As of publication, FEAR-ACU has not responded to requests for comment. The Wire has filed an open-records request with the Texas Department of Public Safety.
+            </p>
+            <div class="article-byline">[ Wire Field Report — Bexar County Bureau ]</div>
         </div>
 
         <div class="article">
             <div class="article-meta">
                 <span class="article-tag tag-investigation">INVESTIGATION</span>
-                <span class="article-date">FEAR-ACU WIRE — DELIVERED 09:15 UTC, JULY 2026</span>
+                <span class="article-date">THE WIRE — DELIVERED 16:12 UTC, JULY 2026</span>
             </div>
-            <h2>What We Know About Commander Wolf — An Analysis</h2>
+            <h2>FEAR-ACU's FOIA Black Hole: What They Don't Want You To See</h2>
             <p>
-                "Commander Aries Wolf" appears with increasing frequency in leaked FEAR-ACU internal communications.
-                A review of accessible personnel databases, veteran records, and LinkedIn-observed military profiles
-                reveals some troubling gaps: the name does not appear in any public military record with a matching
-                rank and service timeline.
+                In 2023, a researcher filed a Freedom of Information Act request with DPS for any and all records referencing FEAR-ACU. The response came back with 47 pages — 38 of them fully redacted. The remaining 9 pages contained nothing more than boilerplate organizational charts that could have been found in any federal emergency response manual.
             </p>
             <p>
-                That doesn't prove he doesn't exist. It proves, at minimum, that the name may not be the one he was
-                issued at birth — or that FEAR-ACU command operates outside the standard DOD personnel registration system.
-                Either explanation is worth asking questions about.
+                We obtained a copy of the unredacted header information from a DPS employee who wishes to remain anonymous. Every line that wasn't blacked out references budget line items with no descriptions. Total FY2024 allocation for "FEAR-related operations" as listed in DPS budget documents: $14.7 million.
             </p>
-            <div class="article-byline">[ Wire Analysis / Open-Source Intelligence Review ]</div>
+            <p>
+                That's not a small program. That's a fleet of vehicles, training facilities, encrypted communications systems, and an unknown number of personnel — all operating under an agency that officially doesn't exist on any public DPS website. Where exactly does that money go?
+            </p>
+            <div class="article-byline">[ Wire Investigation — FOIA Desk ]</div>
+        </div>
+
+        <!-- FEAR-RRU STORIES -->
+        <a name="rru"></a>
+        <div class="article">
+            <img src="images/vehicle.png" alt="FEAR vehicle">
+            <div class="article-meta">
+                <span class="article-tag tag-rru">FEAR-RRU</span>
+                <span class="article-date">THE WIRE — DELIVERED 09:33 UTC, JULY 2026</span>
+            </div>
+            <h2>Gold-Marked Bronco Pursuit on I-35 Raises Questions About RRU Involvement</h2>
+            <p>
+                Dashcam footage obtained by the Wire from a trucker on I-35 just north of Waco shows a gold Ford Bronco with green lightbar — and a DPS plate — running parallel to an APD pursuit at approximately 110mph. The Bronco was not running lights or sirens. It stayed on-scene throughout the entire pursuit, which ended with spike strips deployed by the suspect vehicle.
+            </p>
+            <p>
+                APD has not confirmed FEAR-RRU involvement. The Wire asked APD's public information office whether FEAR units routinely assist in pursuits; we have not yet received a response. A former APD officer speaking on condition of anonymity confirmed that FEAR-RRU has been embedded in select APD pursuit dispatches for the past 18 months.
+            </p>
+            <p>
+                The Bronco in the footage displays partial plate markings: "DEPARTMENT OF PUBLIC SAFETY — ACU 77." Unit 77 is Commander Thorne's assigned unit number across all three FEAR divisions in Texas.
+            </p>
+            <div class="article-byline">[ Wire Investigation — Waco Bureau ]</div>
         </div>
 
         <div class="article">
             <div class="article-meta">
-                <span class="article-tag tag-analysis">ANALYSIS</span>
-                <span class="article-date">FEAR-ACU WIRE — DELIVERED 02:44 UTC, JULY 2026</span>
+                <span class="article-tag tag-rru">FEAR-RRU</span>
+                <span class="article-date">THE WIRE — DELIVERED 11:20 UTC, JUNE 2026</span>
             </div>
-            <h2>Is It Just The Name? Or Is The Name The Point?</h2>
+            <h2>RRU K9 Unit Helps Locate Missing Hiker in Pedernales Falls State Park</h2>
             <p>
-                Let's look at what FEAR-ACU actually stands for: <strong style="color:#ff4444;">First Encounter And Response
-                — Area Containment Unit.</strong> Three words. Three initial letters. The acronym doesn't just describe
-                what the unit does. It describes what the unit <em>is</em> — a source of fear deployed to contain
-                unusual events.
+                A K9 team assigned to FEAR-RRU assisted in the recovery of a 34-year-old Austin man who went missing from Pedernales Falls State Park on the evening of June 14. Texas Parks and Wildlife confirmed the recovery but declined to name the responding K9 unit, stating only that "multiple agencies contributed to the operation."
             </p>
             <p>
-                Someone named this. Someone with authority. Someone understood exactly what they were naming. Whether
-                this was intentional or accidental is — itself — a question worth asking. The lack of a public statement
-                on the matter seven years after activation is notable.
+                The Wire has confirmed through park ranger communications that the K9 unit arrived from FEAR-RRU's Austin sector office. Their plate markings: DPS — RRU 77. The hiker was recovered uninjured after approximately 7 hours in the park. TPWD has not explained why a federal tactical K9 unit was the primary search team in a state park.
             </p>
-            <div class="article-byline">[ Wire Analysis / Editorial ]</div>
+            <div class="article-byline">[ Wire Field Report — Austin Bureau ]</div>
+        </div>
+
+        <!-- FEAR-AAU STORIES -->
+        <a name="aau"></a>
+        <div class="article">
+            <div class="article-meta">
+                <span class="article-tag tag-aau">FEAR-AAU</span>
+                <span class="article-date">THE WIRE — DELIVERED 14:05 UTC, JUNE 2026</span>
+            </div>
+            <h2>AAU Burgundy Suburban Spotted at Stolen Vehicle Recovery Outside Round Rock</h2>
+            <p>
+                A maroon Chevy Suburban with DPS plate "AAU 77" was photographed at the scene of a stolen vehicle recovery on Tuesday, June 10th. The individual whose vehicle was recovered told the Wire that "there were guys in plain-looking tactical gear standing around when I got there. They said they were with public safety. When I asked for badge numbers, they just pointed me toward the officer who actually handles it."
+            </p>
+            <p>
+                Round Rock Police Department has confirmed the recovery but was unable to confirm whether FEAR-AAU personnel were present at the scene, citing an ongoing investigation. FEAR-AAU's stated purpose — assisting law enforcement with routine calls — makes this kind of scene legally ambiguous. They're not law enforcement. But they're also not civilians.
+            </p>
+            <div class="article-byline">[ Wire Field Report — Round Rock Bureau ]</div>
         </div>
 
         <div class="article">
             <div class="article-meta">
-                <span class="article-tag tag-alert">READER REPORT</span>
-                <span class="article-date">FEAR-ACU WIRE — DELIVERED 18:11 UTC, JUNE 2026</span>
+                <span class="article-tag tag-aau">FEAR-AAU</span>
+                <span class="article-date">THE WIRE — DELIVERED 08:41 UTC, MAY 2026</span>
             </div>
-            <h2>Reader Letter: "I Saw Something Outside Dallas"</h2>
+            <h2>AAU Assists in Locating Fleeing Traffic Stop Suspect — No Public Statement Issued</h2>
             <p>
-                Anonymous reader submission: <em>"I'm in the suburbs north of Dallas. Around 11pm on the 12th,
-                I watched three black SUVs without plates drive past my house going about 50mph in a 30 — no lights,
-                no sirens, completely silent. They had those red light bars on top but they weren't on. Looked
-                like something out of a movie. Three guys in black vests. I haven't been able to shake it."</em>
+                On the evening of May 17th, a Hays County sheriff's deputy initiated a traffic stop on a vehicle later determined to be stolen. The driver fled on foot into dense brush. Within 18 minutes, the suspect was in custody — not by the deputy's department or a K9 from Hays County, but by a FEAR-AAU unit whose maroon Jeep was already in the area for an unrelated call.
             </p>
             <p>
-                We reached out to Carrollton PD for comment and have not received a response as of publication.
-                Vehicle descriptions match known FEAR-ACU MCV-ACU profile.
+                Hays County Sheriff's Office confirmed the arrest and stated that "a member of the public" assisted in the capture. When asked whether that "member of the public" was a sworn officer, the Sheriff's Office declined to comment further. FEAR-AAU's involvement was not disclosed in the public press release.
             </p>
-            <div class="article-byline">[ Anonymous Submission / Wire Verified by Editor ]</div>
+            <div class="article-byline">[ Wire Field Report — San Marcos Bureau ]</div>
         </div>
 
-        <!-- CONSPIRACY QUESTIONS -->
+        <!-- CONSPIRACY DESK -->
+        <a name="conspiracy"></a>
+        <div class="article">
+            <div class="article-meta">
+                <span class="article-tag tag-investigation">CONSPIRACY DESK</span>
+                <span class="article-date">THE WIRE — DELIVERED 19:55 UTC, JULY 2026</span>
+            </div>
+            <h2>The 2025 Texas Blackout and the FEAR-ACU Deployment Nobody Talked About</h2>
+            <p>
+                During the February 2025 ice storm that left 4.5 million Texas households without power, a number of our readers reached out about unusual tactical activity near critical infrastructure sites. Three separate witnesses reported seeing black DPS-branded vehicles with green lightbars at electric substations in Austin, San Antonio, and Dallas during the worst of the outage.
+            </p>
+            <p>
+                Oncor confirmed increased security at substations during the event but declined to say who was providing that security. ERCOT also declined to comment, stating only that "grid security is a partnership effort." FEAR-ACU's containment mandate includes critical infrastructure. The timing of their apparent presence — during a weather event that left Texas darkest in recent memory — is either a coincidence or something worth writing down.
+            </p>
+            <p>
+                The Wire has filed records requests with Oncor, ERCOT, and DPS. We will publish what we receive.
+            </p>
+            <div class="article-byline">[ Conspiracy Desk — Infrastructure Bureau ]</div>
+        </div>
+
+        <div class="article">
+            <div class="article-meta">
+                <span class="article-tag tag-analysis">CONSPIRACY DESK</span>
+                <span class="article-date">THE WIRE — DELIVERED 03:17 UTC, JUNE 2026</span>
+            </div>
+            <h2>"Havana Syndrome" Cluster in Austin — FEAR Connection?</h2>
+            <p>
+                In late 2024, a small cluster of unexplained neurological symptoms was reported among federal employees at the US Embassy annex in Austin, Texas. The symptoms mirrored those described in the so-called "Havana Syndrome" cases — sudden-onset headaches, nausea, cognitive disruption — that first appeared among US personnel in Cuba beginning in 2016.
+            </p>
+            <p>
+                The timeline is interesting: the Austin cases appeared roughly two weeks after FEAR-ACU conducted a classified "training exercise" at an undisclosed location in central Texas. The exercise was confirmed in a heavily redacted DPS internal memo obtained by the Wire. FEAR-ACU has not disclosed what the exercise involved.
+            </p>
+            <div class="article-byline">[ Conspiracy Desk — Medical Bureau ]</div>
+        </div>
+
+        <div class="article">
+            <div class="article-meta">
+                <span class="article-tag tag-analysis">CONSPIRACY DESK</span>
+                <span class="article-date">THE WIRE — DELIVERED 11:08 UTC, MAY 2026</span>
+            </div>
+            <h2>Is FEAR-ACU Watching Round Rock's "Minority Report" Algorithm?</h2>
+            <p>
+                Round Rock has been using predictive policing software since 2022. The system, developed by a private vendor under contract with the city, generates "hot spot" maps and individual risk scores based on data that is not publicly accessible. FEAR-ACU operatives have been spotted at RRPD briefings where the algorithm maps are discussed.
+            </p>
+            <p>
+                Neither Round Rock PD nor FEAR-ACU has explained the nature of that relationship, but the Wire has obtained an internal email from an RRPD analyst to a colleague that reads, in full: "They want the same feed we do. DPS has it, FEAR has it. Same pipe, different endpoints."
+            </p>
+            <div class="article-byline">[ Conspiracy Desk — Surveillance Bureau ]</div>
+        </div>
+
+        <div class="article">
+            <div class="article-meta">
+                <span class="article-tag tag-alert">CONSPIRACY DESK</span>
+                <span class="article-date">THE WIRE — DELIVERED 04:22 UTC, APRIL 2026</span>
+            </div>
+            <h2>North Texas Mothman Sightings — or Just FEAR-ACU Night Flights?</h2>
+            <p>
+                Between October 2025 and March 2026, the Wire received 17 reports from north DFW residents describing a "large winged shape" flying at low altitude over residential neighborhoods. The sightings cluster around Denton and near the Lewisville Lake area. Local news outlets have covered the phenomenon; authorities have suggested owls, drones, or optical illusions as explanations.
+            </p>
+            <p>
+                FEAR-ACU operates a small fixed-wing asset out of an undisclosed airstrip in the Metroplex, confirmed by aviation enthusiasts who track unusual military-category flight patterns. The Wing — not publicly acknowledged — has been active since 2020. Correlation may not equal causation. But the timing overlap is... precise.
+            </p>
+            <div class="article-byline">[ Conspiracy Desk — Dallas Bureau ]</div>
+        </div>
+
+        <!-- READER SUBMISSIONS -->
+        <a name="reader-submissions"></a>
         <div class="conspiracy-box">
             <h3>◼ WHAT THE COMMUNITY IS ASKING ◼</h3>
             <ul class="conspiracy-questions">
-                <li>Have you seen any First Encounter And Response units out on YOUR city streets?</li>
-                <li>What does the TIER-1 designation on those vehicles actually mean?</li>
+                <li>Have you seen FEAR-ACU, FEAR-RRU, or FEAR-AAU units on YOUR city streets?</li>
                 <li>Is it odd that their name literally breaks down to F.E.A.R.?</li>
-                <li>Do police work with them? Do they work with police?</li>
-                <li>Who is this Commander Aries Wolf and where was he before 2019?</li>
-                <li>Where does the funding come from for a unit this secretive, this expensive?</li>
-                <li>Why is there no official FEAR-ACU website?</li>
-                <li>What's in those redacted FOIA pages and who redacted them?</li>
-                <li>What really happened in the 2011-event that supposedly prompted all this?</li>
+                <li>Do they operate with police? Do police operate with them?</li>
+                <li>Who is Commander Aries Thorne and why unit 77?</li>
+                <li>Where does the $14.7 million DPS allocation actually go?</li>
+                <li>Why are their lightbars green — and never red or blue?</li>
+                <li>What really happened in the 2011 event that prompted FEAR's formation?</li>
+                <li>Has anyone else seen the February 2025 substation activity?</li>
+                <li>What's in those FOIA pages and who redacted them?</li>
+                <li>Is there a FEAR aerial asset operating out of DFW?</li>
             </ul>
         </div>
 
         <div class="article">
             <div class="article-meta">
-                <span class="article-tag tag-breaking">EDITORIAL</span>
-                <span class="article-date">FEAR-ACU WIRE</span>
+                <span class="article-tag tag-alert">READER REPORT</span>
+                <span class="article-date">THE WIRE — DELIVERED 18:11 UTC, JUNE 2026</span>
             </div>
-            <h2>Our Commitment: Keep Asking</h2>
+            <h2>Reader Letter: "I Saw a Maroon Suburban Staring at Me"</h2>
             <p>
-                FEAR-ACU operates — according to its own charter — in situations where conventional response has failed.
-                But the charter doesn't explain why. And the silence around the unit itself is, frankly, the loudest
-                part of the story. We'll keep posting what we find, what people tell us, and what the paper trail shows.
-                You should too. The more eyes, the harder it is to contain something.
+                Anonymous reader submission from southwest Austin: <em>"I was parked at a trailhead near Barton Creek around 6pm on May 2nd. A maroon Chevy Suburban pulled up about 15 feet away. No one got out. I stared at it for a few seconds, then the driver — guy in black, sunglasses, no visible badge — rolled down the window and said 'You might want to leave. Area's not safe tonight.' I asked why and he just nodded at the brush. I checked the plate later. DPS — AAU 77."</em>
             </p>
-            <div class="article-byline">[ Wire Editorial — Questions Welcome at wire@fearacu.observer ]</div>
+            <p>
+                We've been unable to verify what, if anything, was in that area that night. FEAR-AAU has not responded to requests for comment.
+            </p>
+            <div class="article-byline">[ Anonymous Submission — Wire Verified by Editor ]</div>
         </div>
+
+        <div class="dots-pattern">◼ END OF LIVE FEED — CHECK BACK FOR UPDATES ◼</div>
     </section>
 
-    <div class="dots-pattern">◼ END OF LIVE FEED — CHECK BACK FOR UPDATES ◼</div>
-
-    <!-- BREAKING TICKER -->
-    <div class="ticker-bar" style="background:#080808;border-top:1px solid #ff0000;border-bottom:1px solid #ff0000;padding:0.7rem 1rem;overflow:hidden;">
-      <div style="max-width:900px;margin:0 auto;display:flex;align-items:center;gap:1rem;">
-        <span id="ticker-dot" style="width:10px;height:10px;background:#ff0000;border-radius:50%;flex-shrink:0;box-shadow:0 0 8px #ff0000;transition:background 0.4s;"></span>
-        <span style="color:#ff4444;font-size:0.7rem;letter-spacing:3px;text-transform:uppercase;flex-shrink:0;font-weight:bold;">LIVE</span>
-        <div style="flex:1;overflow:hidden;">
-          <span id="breaking-text" style="color:#ccc;font-size:0.85rem;letter-spacing:0.5px;transition:opacity 0.4s;display:inline-block;width:100%;"></span>
-        </div>
-        <span style="color:#444;font-size:0.65rem;letter-spacing:2px;flex-shrink:0;" id="ticker-clock"></span>
-      </div>
-    </div>
     <footer>
         <div class="disclaimer">
             <div class="disclaimer-label">◼ Cosplay Disclaimer ◼</div>
-            <p>
-                This is a fictional cosplay news publication. ALL articles, quotes, and "investigations" displayed here
-                are entirely fabricated for creative and entertainment purposes. FEAR-ACU is a fictional organization
-                created for cosplay immersion. No real person named Commander Aries Wolf exists in any official capacity
-                referenced here. Any resemblance to real news stories is purely coincidental — or is it?
-            </p>
+            <p>This is a fictional cosplay news publication for entertainment purposes only. All articles, quotes, and "investigations" are fabricated. FEAR-ACU/FEAR-RRU/FEAR-AAU are fictional organizations. No resemblance to real events or persons is intended.</p>
         </div>
-        <div class="corp-info">© 2026 THE FEAR-ACU WIRE (COSPLAY) — <b>A WOLF REACTIVE SYSTEMS PRODUCT</b></div>
+        <div class="corp-info">© 2026 THE WIRE (COSPLAY) — A WOLF REACTIVE SYSTEMS PRODUCT</div>
     </footer>
 
     <script>
@@ -340,19 +516,6 @@
         }
         setInterval(updateClock, 1000);
         updateClock();
-    </script>
-    <script src="ticker.js"></script>
-    <script>
-      (function(){
-        const clk = document.getElementById("ticker-clock");
-        if(!clk) return;
-        const pad = n => String(n).padStart(2,"0");
-        function tick(){
-          const d = new Date();
-          clk.textContent = pad(d.getHours())+":"+pad(d.getMinutes())+":"+pad(d.getSeconds());
-        }
-        tick(); setInterval(tick, 1000);
-      })();
     </script>
 </body>
 </html>
